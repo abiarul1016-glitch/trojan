@@ -13,6 +13,12 @@ sort tests by:
    - filename: test - year
 
 upcoming features:
+- tips and tricks page, with advice for current highschoolers (ib and not), with videos on how to live the best
+   - ex.
+      - all that matters for uni admissions (in ontario) is your top 6 average, and program competitiveness
+      - physical health is important and keeps your mind sharp
+      - some videos from current students, advising what they would say to future students
+      
 - allow nominations for 'awards' for teachers
    - do a scale from best teacher, top teacher, mid, L teacher, to worst teacher
    - only allow one nomination from each person - verify accounts using students' student numbers, and peel emails to main validity

@@ -179,7 +179,12 @@ body {
     }
 
     .possible-subject {
-        background-color: var(--secondary);
+        display: flex;
+        gap: 0.25rem;
+        align-items: center;
+
+        /* background-color: var(--secondary); */
+        box-shadow: 0px 3px 15px rgb(from var(--primary) r g b / 0.5);
         color: var(--dark);
         padding: 0.5rem 1rem;
 
