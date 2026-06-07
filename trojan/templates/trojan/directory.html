@@ -1,0 +1,26 @@
+<!-- add if user is logged in logic to display other layout -->
+{% extends 'trojan/layout.html' %}
+{% load static %}
+
+{% block stylesheet %}{% static 'trojan/directory.css' %}{% endblock %}
+
+{% block title %}trojan directory{% endblock %}
+
+{% block body %}
+    <section class="search">
+        <h1>what class are you looking for?</h1>
+        <div class="search-area">
+            <form action="">
+                <input class="search-bar" type="text" name="" id="" placeholder="subject?">
+                <input type="submit" value="search">
+            </form>
+        </div>
+        <section class="possible-subjects">
+
+        </section>
+    </section>
+
+    <section class="complete-directory">
+
+    </section>
+{% endblock %}

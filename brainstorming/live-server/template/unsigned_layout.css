@@ -12,8 +12,6 @@
     --h2-size: 2rem;
     --h3-size: 1rem;
 
-    --vertical-gap: 1rem;
-
 }
 
 /* basic reset */
@@ -21,6 +19,10 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
 }
 
 /* components */
@@ -90,6 +92,17 @@ body {
         }
     }
 
+    /* default main sizing + centering */
+    main {
+        max-width: 75dvw;
+        margin: 0rem auto;
+        margin-bottom: 10rem;
+    }
+
+    /* default link coloring */
+    a {
+        color: var(--primary);
+    }
 
 /* {% TEMPLATED %} */
 

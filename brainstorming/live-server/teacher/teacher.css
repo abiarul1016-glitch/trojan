@@ -1,0 +1,638 @@
+/* google fonts */
+@import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
+
+/* variables */
+:root {
+
+    /* normal mode */
+    --primary: #3F72AF;
+    --secondary: #DBE2EF;
+    --light: #F9F7F7;
+    --dark: #112D4E;
+    
+    /* dark mode test */
+    /* --primary: #DBE2EF;
+    --secondary: #3F72AF;
+    --light: #112D4E;
+    --dark: #F9F7F7;
+
+    --h1-size: 4rem;
+    --h2-size: 2rem;
+    --h3-size: 1rem; */
+
+}
+
+/* basic reset */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+/* components */
+button {
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: 2px solid var(--dark);
+
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+button.dark {
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+button.light {
+    background-color: var(--light);
+    color: var(--dark);
+}
+
+/* main */
+body {
+    font-family: 'Inter', sans-serif;
+
+    background-color: var(--light);
+    color: var(--dark);
+
+    display: grid;
+    grid-template-areas: 
+    "header"
+    "main"
+    "footer";
+}
+
+/* header */
+    header {
+        grid-area: header;
+        /* background-color: var(--dark); */
+
+        nav {
+
+            padding: 1rem 0rem;
+
+            ul {
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+
+                justify-content: space-around;
+                align-content: center;
+
+                list-style: none;
+
+                img {
+                    min-height: 2rem;
+                }
+
+                a {
+                    color: var(--dark);
+                    text-decoration: none;
+
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    /* default main sizing + centering */
+    main {
+        max-width: 75dvw;
+        margin: 0rem auto;
+        margin-bottom: 10rem;
+    }
+
+    /* default link coloring */
+    a {
+        color: var(--primary);
+    }
+
+/* {% TEMPLATED %} */
+
+    main {
+        display: grid;
+        grid-template-areas: 
+        "details similar-teachers";
+
+        grid-template-columns: 3fr 1fr;
+        gap: 4rem;
+    }
+
+    /* main */
+        .teacher-details {
+            margin-top: 5rem;
+
+            grid-area: details;
+
+            display: grid;
+            grid-template-areas: 
+            "header         header"
+            "select-reviews select-reviews"
+            "third-row      third-row"
+            "positions      positions"
+            "courses        education"
+            "contact        location"
+            "reviews        reviews";
+
+            gap: 2rem;
+
+            grid-template-columns: 1fr 1fr;
+
+        }
+
+        /* teacher - header */
+            .teacher-details-header {
+                grid-area: header;
+
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+
+            }
+
+            .teacher-details-header-first {
+                display: grid;
+                grid-template-columns: 1fr 6fr;
+
+                gap: 1rem;
+            
+                align-content: start;
+                align-items: center;
+
+            }
+
+            /* profile picture */
+            .teacher-image-container {
+
+                width: 100%;
+                aspect-ratio: 1 / 1;
+
+                border-radius: 20px;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: center;
+                }
+            }
+
+            .teacher-rating {
+                margin-left: auto;
+                display: flex;
+            }
+            
+            .teacher-header-right-wrapper {
+                display: flex;
+                flex-direction: column;
+
+                gap: 0.25rem;
+
+                .teacher-header-first {
+                    display: flex;
+                    flex-direction: row;
+
+                    align-items: center;
+
+                    h1 {
+                        font-size: 3rem;
+                    }
+
+                }
+
+                .teacher-header-second {
+                    display: flex;
+                    flex-direction: row;
+
+                    align-items: center;
+
+                    .teacher-fullname {
+                        font-weight: 600;
+                    }
+
+                    .teacher-pronouns {
+                        /* might space beside name instead */
+                        /* margin-left: 0.5rem; */
+                        margin-left: auto;
+                    }
+                }
+            }
+
+            .teacher-details-header-second {
+                display: flex;
+                flex-direction: row;
+
+                align-items: center;
+
+                .teacher-details-salary {
+                    margin-left: auto;
+
+                    font-weight: 800;
+                    font-size: 2rem;
+                }
+            }
+
+            .teacher-details-header-third {
+                display: flex;
+                gap: 0.5rem;
+
+                align-items: center;
+            }
+
+            .teacher-departments {
+                display: flex;
+                gap: 0.5rem;
+
+                align-items: center;
+            }
+
+            .teacher-department {
+                /* background-color: var(--secondary); */
+                color: var(--dark);
+                padding: 0.5rem 1rem;
+
+                font-size: 1rem;
+                font-weight: 600;
+
+                border-radius: 40px;
+                border: 2px solid var(--dark);
+            }
+
+            .teacher-badges {
+                display: flex;
+                gap: 0.5rem;
+
+                align-items: center;
+            }
+
+            /* badges */
+                .teacher-badge {
+                    background-color: var(--dark);
+                    
+                    color: var(--light);
+                    padding: 0.5rem 1rem;
+
+                    font-size: 1rem;
+                    font-weight: 600;
+
+                    border-radius: 40px;
+                    border: 2px solid var(--dark);
+                }
+
+                .teacher-badge-gradient {
+                    /* gradient button */
+                    background: linear-gradient(45deg, hsla(213, 47%, 47%, 1) 0%, hsla(212, 64%, 19%, 1) 100%);
+                }
+
+                .badge-logo {
+                    display: flex;
+                    flex-direction: row;
+
+                    align-items: center;
+                    border: none;
+
+                    gap: 0.5rem;
+                }
+
+
+        /* select reviews */
+            .select-reviews {
+                grid-area: select-reviews;
+
+                margin: 0rem 1.5rem;
+
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .select-review {
+                display: flex;
+                flex-direction: column;
+
+                gap: 1rem;
+
+                padding: 1rem;
+                border: 1px solid var(--secondary);
+                border-radius: 20px;
+                
+                box-shadow: 0px 10px 40px var(--primary);
+                /* intresting inset shadow */
+                /* box-shadow: inset 0px 0px 20px var(--primary); */
+
+            }
+
+            .select-review-header {
+                display: flex;
+                flex-direction: row;
+
+                align-items: center;
+
+                h3 {
+                    font-size: 1.75rem;
+                }
+            }
+
+            .select-review-second {
+                display: flex;
+                flex-direction: row;
+
+                .select-review-class {
+                    font-weight: 600;
+                }
+
+                time {
+                    margin-left: auto;
+                }
+            }
+
+            .select-review-third {
+                padding: 0rem 1rem;
+
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+
+                blockquote {
+                    font-size: 1.5rem;
+                }
+
+                cite {
+                    margin-left: auto;
+                    font-weight: 600;
+                }
+            }
+
+            .reviews-scroll {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+
+        .teacher-details-third-row {
+
+            grid-area: third-row;
+
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+        }
+
+        /* images */
+            .teacher-image-gallery {
+                
+                /* border: 2px solid var(--secondary); */
+                border-radius: 20px;
+
+                box-shadow: 0px 10px 20px rgb(from var(--dark) r g b / 0.5);
+
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+
+                    object-fit: cover;
+                    object-position: center;
+                }
+            }
+
+        /* socials */
+            .teacher-additional-details-wrapper {
+                margin: 0rem 1rem;
+
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .teacher-additional-list {
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+
+                justify-content: center;
+                align-items: center;
+
+                border: 2px solid var(--dark);
+                padding: 0.25rem;
+                border-radius: 10px;
+            }
+
+            .teacher-socials {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+
+                gap: 0.5rem;
+            }
+
+
+        /* general / repeated */
+            .teacher-details-card-general {
+                border: 2px solid var(--secondary);
+                padding: 2rem;
+                border-radius: 30px;
+
+                box-shadow: 0px 5px 10px var(--dark);
+
+                display: flex;
+
+                .teacher-details-left-card {
+                    display: flex;
+                    flex-direction: column;
+
+                    justify-content: center;
+                    align-items: center;
+
+                    .teacher-details-card-icons {
+                        display: flex;
+                        flex-direction: row;
+
+                        gap: 0.5rem;
+                    }
+
+                }
+            }
+
+            .basic-teacher-list {
+                padding: 0rem 2rem;
+
+                list-style: none;
+
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+
+                justify-content: center;
+
+                li {
+                    h3 {
+                        display: inline;
+                    }
+                }
+            }
+            
+                
+        .teacher-positions {
+            grid-area: positions;
+
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .teacher-courses {
+            grid-area: courses;
+        }
+
+        .teacher-education {
+            grid-area: education;
+        }
+
+        .teacher-contact {
+            grid-area: contact;
+        }
+
+        .teacher-location {
+            grid-area: location;
+        }
+
+        .teacher-reviews-wrapper {
+            grid-area: reviews;
+        }
+
+    /* reviews */
+        .teacher-reviews-wrapper {
+
+            /* have to add this spacing in somewhere more general */
+            margin-top: 2rem;
+
+            grid-area: reviews;
+
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+
+            h2 {
+                font-size: 3rem;
+            }
+        }
+
+        .teacher-reviews {
+            display: flex;
+            flex-direction: column;
+            gap: 3.5rem;
+        }
+
+        .teacher-review {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            padding: 1.5rem 2rem;
+
+            /* border: 2px solid var(--dark); */
+            border: 2px solid var(--secondary);
+            border-radius: 25px;
+
+            box-shadow: 0px 15px 30px var(--primary);
+
+        }
+
+        .teacher-review-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            h3 {
+                font-size: 2.5rem;
+            }
+
+            p {
+                margin-left: auto;
+            }
+        }
+
+        .teacher-review-second {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .teacher-review-class {
+                font-weight: 600;
+            }
+
+            time {
+                margin-left: auto;
+            }
+        }
+
+        .teacher-review-third {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            padding: 1rem;
+
+            blockquote {
+                font-size: 1.5rem;
+            }
+
+            cite {
+                margin-left: auto;
+
+                font-weight: 600;
+            }
+
+        }
+
+    /* right */
+        .right-side-wrapper {
+            grid-area: similar-teachers;
+            padding: 2rem;
+        }
+
+/* {% TEMPLATED %} */
+
+/* footer */
+    footer {
+        grid-area: footer;
+        padding: 5rem 2rem;
+
+        background-color: var(--dark);
+        color: var(--light);
+
+        display: flex;
+        flex-direction: row;
+
+        justify-content: space-around;
+        align-content: center;
+
+        gap: 1rem;
+    }
+
+    .footer-column {
+        ul {
+            list-style: none;
+
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            li {
+                font-weight: 500;
+            }
+        }
+    }
+
+    .name-logo {
+        display: flex;
+        gap: 0.5rem;
+    }

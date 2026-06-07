@@ -12,8 +12,6 @@
     --h2-size: 2rem;
     --h3-size: 1rem;
 
-    --vertical-gap: 1rem;
-
 }
 
 /* basic reset */
@@ -21,6 +19,10 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
 }
 
 /* components */
@@ -90,8 +92,106 @@ body {
         }
     }
 
+    /* default main sizing + centering */
+    main {
+        max-width: 75dvw;
+        margin: 0rem auto;
+        margin-bottom: 10rem;
+    }
+
+    /* default link coloring */
+    a {
+        color: var(--primary);
+    }
 
 /* {% TEMPLATED %} */
+
+    main {
+        margin-top: 2rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        /* font sizing */
+        h1 {
+            font-size: 3.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-size: 2rem;
+        }
+
+    }
+
+    .feature-overview {
+        min-height: 80dvh;
+
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        justify-content: center;
+
+    }
+
+    .feature-list {
+        margin: 0rem 2rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        li {
+            font-size: 1.5rem;
+        }
+    }
+
+    .request-a-feature {
+        display: flex;
+        flex-direction: row;
+        gap: 0.3rem;
+
+        justify-content: center;
+        align-items: center;
+
+        margin-top: 1.5rem;
+    }
+
+
+    /* feature timeline */
+    .feature-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+    }
+
+    .feature-list-container {
+        margin: 0rem 3rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .feature {
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
+
+        align-items: center;
+
+        .feature-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+    }
 
 /* {% TEMPLATED %} */
 

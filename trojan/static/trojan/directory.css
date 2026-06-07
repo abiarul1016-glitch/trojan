@@ -1,0 +1,46 @@
+@import url(layout.css);
+
+/* templated */
+
+/* search */
+    .search {
+        min-height: 100dvh;
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--vertical-gap);
+
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            font-size: var(--h1-size);
+        }
+    }
+
+    .search-area {
+        form {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+        }
+    }
+
+    .search-bar {
+        width: 40rem;
+        padding: 1rem 1rem;
+        border-radius: 10px;
+    }
+
+    .search-button
+
+    .possible-subjects {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+
+/* complete directory */
+    .complete-directory {
+
+    }

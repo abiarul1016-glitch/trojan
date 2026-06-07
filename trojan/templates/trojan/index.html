@@ -1,10 +1,13 @@
-{% block stylesheet %}index.css{% endblock %}
+{% extends 'trojan/layout.html' %}
+{% load static %}
+
+{% block stylesheet %}{% static 'trojan/index.css' %}{% endblock %}
 
 {% block body %}
     <section class="hero-page">
         <div class="hero-title-container">
-            <h1>cuz shit*y teachers exist.</h1>
-            <img class="hero-logo" src="/assets/112D4E - dark/trojan_right.svg" alt="Trojan Logo">
+            <h1>{{ hero_phrase }}</h1>
+            <img class="hero-logo" src="{% static 'trojan/112D4E - dark/trojan_right.svg' %}" alt="Trojan Logo">
         </div>
         <div class="hero-buttons">
             <button class="dark">Primary</button>

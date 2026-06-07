@@ -1,0 +1,38 @@
+ADD BACKGROUND TO FEATURES PAGE
+- add share button right about rating, in corner with whitespace.
+
+current features/launch features:
+- view details of all courses and teachers
+- views past tests from courses
+- anonymous commenting/reviewing
+
+
+sort tests by:
+ - teacher
+  - unit
+   - filename: test - year
+
+upcoming features:
+- allow nominations for 'awards' for teachers
+   - do a scale from best teacher, top teacher, mid, L teacher, to worst teacher
+   - only allow one nomination from each person - verify accounts using students' student numbers, and peel emails to main validity
+   - (every 6 months) create an announcement and email the best, top, L, and worst teachers for their acheivements
+   - in the email, use AI to analyze the reviews to offer advice, where they did good, and where they can improve
+   - track each win, so analysis such as a teacher holding best teacher streak can be analyzed
+   - email peel head office as well, to keep them updated
+      - story is that, once a teacher i knew won the best teacher in peel award, being nominated by the principal
+      - that experience inspired me to build a tool to bring some control into students hands, the end-users, and more freedom of speech and information
+      - now, teachers are nominated fairly, and compensated fairly. real democracy.
+
+- dark mode/light mode (just switch the colour palette variables, to an aesthetic matter), with svg icons of light and dark, and smooth animation, preferably no page reload
+- add simple/advanced toggle, with simple only displaying core info for both teachers and courses, and possibly even increases the font size (just increase the global rem in body or smth)
+- automatic course and teacher reporting via (common email)
+- teachers' are able to view their profile and relevant stats
+- anyone is able to add in a missing course or teacher to directory
+- implementation of AI, for course and teacher summaries, relevant test validation, improving the automatic email
+- automatic (probably using AI) feature posts, based on diffs in github commits
+- sharing ability of a courses profile and teachers profile, which display key info (name, rating description, key review) upon preview
+
+todo:
+- add ai-summarized/generated important section, below brief description on course details page
+- add tips/tricks section on course details page
