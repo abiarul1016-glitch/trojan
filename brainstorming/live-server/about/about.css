@@ -114,7 +114,6 @@ body {
 /* {% TEMPLATED %} */
 
     body {
-
         background-image: url('/brainstorming/assets/backgrounds/mesh-gradient_1.svg');
         background-repeat: no-repeat;
         background-size: cover;
@@ -138,6 +137,10 @@ body {
         h2 {
             font-size: 2rem;
         }
+        
+        h3 {
+            font-size: 1.5rem;
+        }
 
         p, li {
             font-size: 1.5rem;
@@ -155,7 +158,7 @@ body {
     }
 
     /* glass */
-    .about-philosophy, .what, .how {
+    .about-philosophy, .what, .how, .about-why {
         padding: 3rem 3rem;
 
         background-color: rgb(from var(--light) r g b / 0.35);
@@ -171,7 +174,7 @@ body {
         font-size: 1rem;
 
         /* glass */
-        
+
     }
 
     .what-and-how {
