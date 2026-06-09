@@ -32,13 +32,20 @@ body {
 }
 
 /* components */
-button {
+button, input[type='submit'] {
     padding: 0.5rem 1rem;
     border-radius: 10px;
     border: 2px solid var(--dark);
 
     font-size: 1rem;
     font-weight: 600;
+
+    transition: background-color 0.3s ease, transform 0.5s ease, box-shadow 0.5s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 5px 20px var(--primary);
+    }
 }
 
 button.dark {

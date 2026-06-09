@@ -113,6 +113,51 @@ body {
 
 /* {% TEMPLATED %} */
 
+main {
+        margin-top: 2rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        /* font sizing */
+        h1 {
+            font-size: 3.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-size: 2rem;
+        }
+
+        p, li {
+            font-size: 1.5rem;
+        }
+}
+
+.about-date {
+    font-size: 1rem;
+}
+
+.what-and-how {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.what {
+    
+}
+
+.how {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 /* {% TEMPLATED %} */
 
 /* footer */
