@@ -1,5 +1,6 @@
-from django.core.validators import RegexValidator
-from django.db import models
+from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
+from django.db import models, transaction
 
 # phone number validator - implementation to create custom phone number field
 # can update to use django-phonenumber-field library, to handle better formatting
@@ -37,6 +38,9 @@ PROGRAM_CHOICES = [
 
 
 # Create your models here.
+
+
+# school-related models
 class Program(models.Model):
     name = models.CharField(choices=PROGRAM_CHOICES, max_length=4)
 
@@ -81,7 +85,35 @@ class Subject(models.Model):
         return self.name
 
 
+# course-related models
+
+
+class CourseBadge:
+    COURSE_BADGE_TYPES = [
+        ("TOP_COURSE", "top course"),
+        ("LIKED_COURSE", "liked course"),
+        ("L_COURSE", "L course"),
+        ("TRASH_COURSE", "trash course"),
+    ]
+
+    type = models.CharField(
+        help_text="A badge awarded to a course, depending on its standing among the student body.",
+        choices=COURSE_BADGE_TYPES,
+        blank=True,
+    )
+
+
 class Course(models.Model):
+    # summaries
+    summary = models.CharField(
+        help_text="A human-generated summary of a teacher.", blank=True
+    )
+    generated_summary = models.CharField(
+        help_text="A summary of a teacher generated using AI, based on the review text.",
+        blank=True,
+        default=summary,
+    )
+
     name = models.CharField()
     subject = models.ForeignKey(Subject, related_name="courses")
     code = models.CharField(unique=True)
@@ -89,6 +121,16 @@ class Course(models.Model):
         Program,
         help_text="Whether this course belongs to a specific program at the school.",
         related_name="courses",
+    )
+
+    # badge
+    badge = models.ForeignKey(
+        CourseBadge,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        default=None,
+        related_name="teachers",
     )
 
     description = models.CharField()
@@ -107,14 +149,40 @@ class Course(models.Model):
         super().save(*args, **kwargs)
 
 
-class Course_Pictures(models.Model):
+class CoursePictures(models.Model):
     course = models.ForeignKey(Course, related_name="pictures")
     picture = models.ImageField(
         upload_to=lambda instance, filename: f"course/{instance.course.code}/{filename}"
     )
 
 
+# teacher-related models
+class TeacherBadge(models.Model):
+    TEACHER_BADGE_TYPES = [
+        ("TOP_TEACHER", "top teacher"),
+        ("W_TEACHER", "W teacher"),
+        ("L_TEACHER", "L teacher"),
+        ("BOTTOM_TEACHER", "bottom teacher"),
+    ]
+
+    type = models.CharField(
+        help_text="A badge awarded to a teacher, depending on their standing among the student body.",
+        choices=TEACHER_BADGE_TYPES,
+        blank=True,
+    )
+
+
 class Teacher(models.Model):
+    # summaries
+    summary = models.CharField(
+        help_text="A human-generated summary of a teacher.", blank=True
+    )
+    generated_summary = models.CharField(
+        help_text="A summary of a teacher generated using AI, based on the review text.",
+        blank=True,
+        default=summary,
+    )
+
     # basic info
     school = models.ForeignKey(on_delete=models.CASCADE, related_name="teachers")
 
@@ -125,6 +193,16 @@ class Teacher(models.Model):
     pronouns = models.CharField(choices=PRONOUN_CHOICES, blank=True)
 
     date_of_birth = models.DateField()
+
+    # badge
+    badge = models.ForeignKey(
+        TeacherBadge,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        default=None,
+        related_name="teachers",
+    )
 
     # contact info + location
     # has to start with p - regex
@@ -154,7 +232,7 @@ class Teacher(models.Model):
     business_address = models.TextField(blank=True)
 
     # finance
-    salary = models.DecimalField(decimal_places=2, blank=True, null=True)
+    salary = models.DecimalField(decimal_places=2, blank=True, null=True, default=None)
 
     # socials + links
     sunshine_list = models.URLField(
@@ -176,6 +254,11 @@ class Teacher(models.Model):
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
+    # setting profile picture - either the one explicitly set, or the first one in all the pictures
+    @property
+    def profile_picture(self):
+        self.pictures.get(is_profile_picture=True) or self.pictures.first()
+
     def __str__(self):
         return f"{self.full_name} ({self.school})"
 
@@ -195,11 +278,31 @@ class Teacher(models.Model):
         super().save(*args, **kwargs)
 
 
-class User(models.Model):
-    pass
+class TeacherPictures(models.Model):
+    teacher = models.ForeignKey(Teacher, related_name="pictures")
+    picture = models.ImageField(
+        upload_to=lambda instance, filename: (
+            f"teacher/{instance.teacher.pdsb_number}/{filename}"
+        )
+    )
+
+    is_profile_picture = models.BooleanField(
+        help_text="Allows selection of profile picture from all the pictures.",
+        default=False,
+    )
+
+    # save function, to ensure a teacher has one profile picture selected at a time
+    def save(self, *args, **kwargs):
+        with transaction.atomic():
+            if self.is_profile_picture:
+                pass
+
+        super().save(*args, **kwargs)
 
 
 class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     school = models.ForeignKey(School, related_name="students")
     student_number = models.PositiveIntegerField(unique=True)
     grade = models.PositiveIntegerField()
@@ -208,3 +311,45 @@ class Student(models.Model):
     @property
     def student_email(self):
         return f"{self.student_number}@pdsb.net"
+
+
+# review models
+class BaseReview(models.Model):
+    reviewer = models.ForeignKey(Student, on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    text = models.TextField()
+
+    class Meta:
+        abstract = True
+
+
+class CourseReview(BaseReview):
+    reviewer = models.ForeignKey(
+        Student, on_delete=models.CASCADE, related_name="course_reviews"
+    )
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="reviews")
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["reviewer", "course"], name="unique_course_student_review"
+            ),
+        ]
+
+
+class TeacherReview(BaseReview):
+    reviewer = models.ForeignKey(
+        Student, on_delete=models.CASCADE, related_name="teacher_reviews"
+    )
+    teacher = models.ForeignKey(
+        Teacher, on_delete=models.CASCADE, related_name="reviews"
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["reviewer", "teacher"], name="unique_teacher_student_review"
+            ),
+        ]
