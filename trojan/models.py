@@ -24,6 +24,7 @@ PRONOUN_CHOICES = [
     ("other", "Other/Ask"),
 ]
 
+# might not need this, if user-inputted and just using foreign key
 PROGRAM_CHOICES = [
     ("IB", "International Baccalaureate"),
     ("AP", "Advanced Placement"),
@@ -52,7 +53,13 @@ class School(models.Model):
     province_code = models.CharField(max_length=2)
     country = models.CharField(max_length=64)
 
-    programs = models.ManyToManyField(Program, related_name="schools")
+    programs = models.ManyToManyField(
+        Program,
+        help_text="The programs offered at this school.",
+        related_name="schools",
+    )
+
+    phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
 
     def __str__(self):
         return self.name
@@ -70,12 +77,41 @@ class Subject(models.Model):
     name = models.CharField()
     faculty = models.ForeignKey(Faculty, related_name="subjects")
 
+    def __str__(self):
+        return self.name
+
 
 class Course(models.Model):
     name = models.CharField()
     subject = models.ForeignKey(Subject, related_name="courses")
     code = models.CharField(unique=True)
+    program = models.ForeignKey(
+        Program,
+        help_text="Whether this course belongs to a specific program at the school.",
+        related_name="courses",
+    )
+
     description = models.CharField()
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+
+        if self.name:
+            self.name = self.name.capitalize()
+
+        if self.code:
+            self.code = self.code.upper()
+
+        super().save(*args, **kwargs)
+
+
+class Course_Pictures(models.Model):
+    course = models.ForeignKey(Course, related_name="pictures")
+    picture = models.ImageField(
+        upload_to=lambda instance, filename: f"course/{instance.course.code}/{filename}"
+    )
 
 
 class Teacher(models.Model):
@@ -100,7 +136,11 @@ class Teacher(models.Model):
 
     # automatically generated upon save if not included
     pdsb_email = models.EmailField(unique=True, blank=True)
-    pdsb_direct_email = models.EmailField(unique=True, blank=True)
+    pdsb_direct_email = models.EmailField(
+        help_text="The email that teachers check much more frequently than their regular one",
+        unique=True,
+        blank=True,
+    )
 
     personal_email = models.EmailField(unique=True, blank=True)
 
@@ -117,7 +157,11 @@ class Teacher(models.Model):
     salary = models.DecimalField(decimal_places=2, blank=True, null=True)
 
     # socials + links
-    sunshine_list = models.URLField(unique=True, blank=True)
+    sunshine_list = models.URLField(
+        help_text="The website containing teacher details for those who make over $100k. Fun Fact: Initially created to manufacture backlash against teacher to cut their funding.",
+        unique=True,
+        blank=True,
+    )
     linkedin = models.URLField(blank=True)
     instagram = models.URLField(blank=True)
     facebook = models.URLField(blank=True)
@@ -160,7 +204,7 @@ class Student(models.Model):
     student_number = models.PositiveIntegerField(unique=True)
     grade = models.PositiveIntegerField()
     program = models.ManyToManyField(Program, related_name="students")
-    
+
     @property
     def student_email(self):
-        return f'{self.student_number}@pdsb.net'
+        return f"{self.student_number}@pdsb.net"
