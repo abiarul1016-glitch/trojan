@@ -279,7 +279,9 @@ class Teacher(models.Model):
 
 
 class TeacherPictures(models.Model):
-    teacher = models.ForeignKey(Teacher, related_name="pictures")
+    teacher = models.ForeignKey(
+        Teacher, on_delete=models.CASCADE, related_name="pictures"
+    )
     picture = models.ImageField(
         upload_to=lambda instance, filename: (
             f"teacher/{instance.teacher.pdsb_number}/{filename}"
@@ -295,7 +297,9 @@ class TeacherPictures(models.Model):
     def save(self, *args, **kwargs):
         with transaction.atomic():
             if self.is_profile_picture:
-                pass
+                self.teacher.pictures.filter(is_profile_picture=True).update(
+                    is_profile_picture=False
+                )
 
         super().save(*args, **kwargs)
 
