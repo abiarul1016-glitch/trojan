@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator, RegexVa
 from django.db import models, transaction
 
 # phone number validator - implementation to create custom phone number field
-# can update to use django-phonenumber-field library, to handle better formatting
+# NOTE: can update to use django-phonenumber-field library, to handle better formatting
 phone_regex = RegexValidator(
     regex=r"^\+?1?\d{9,15}$",
     message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
@@ -71,7 +71,9 @@ class School(models.Model):
 
 class Faculty(models.Model):
     name = models.CharField()
-    school = models.ForeignKey(School, related_name="faculties")
+    school = models.ForeignKey(
+        School, on_delete=models.CASCADE, related_name="faculties"
+    )
 
     def __str__(self):
         return self.name
@@ -79,7 +81,9 @@ class Faculty(models.Model):
 
 class Subject(models.Model):
     name = models.CharField()
-    faculty = models.ForeignKey(Faculty, related_name="subjects")
+    faculty = models.ForeignKey(
+        Faculty, on_delete=models.PROTECT, related_name="subjects"
+    )
 
     def __str__(self):
         return self.name
@@ -88,7 +92,7 @@ class Subject(models.Model):
 # course-related models
 
 
-class CourseBadge:
+class CourseBadge(models.Model):
     COURSE_BADGE_TYPES = [
         ("TOP_COURSE", "top course"),
         ("LIKED_COURSE", "liked course"),
@@ -115,10 +119,13 @@ class Course(models.Model):
     )
 
     name = models.CharField()
-    subject = models.ForeignKey(Subject, related_name="courses")
+    subject = models.ForeignKey(
+        Subject, on_delete=models.PROTECT, related_name="courses"
+    )
     code = models.CharField(unique=True)
     program = models.ForeignKey(
         Program,
+        on_delete=models.PROTECT,
         help_text="Whether this course belongs to a specific program at the school.",
         related_name="courses",
     )
@@ -130,7 +137,7 @@ class Course(models.Model):
         blank=True,
         null=True,
         default=None,
-        related_name="teachers",
+        related_name="courses",
     )
 
     description = models.CharField()
@@ -149,11 +156,16 @@ class Course(models.Model):
         super().save(*args, **kwargs)
 
 
+# helper function dictating the path the save course images
+def course_directory_path(instance, filename):
+    return f"course/{instance.course.code}/{filename}"
+
+
 class CoursePictures(models.Model):
-    course = models.ForeignKey(Course, related_name="pictures")
-    picture = models.ImageField(
-        upload_to=lambda instance, filename: f"course/{instance.course.code}/{filename}"
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="pictures"
     )
+    picture = models.ImageField(upload_to=course_directory_path)
 
 
 # teacher-related models
@@ -184,7 +196,9 @@ class Teacher(models.Model):
     )
 
     # basic info
-    school = models.ForeignKey(on_delete=models.CASCADE, related_name="teachers")
+    school = models.ForeignKey(
+        School, on_delete=models.PROTECT, related_name="teachers"
+    )
 
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
@@ -232,7 +246,9 @@ class Teacher(models.Model):
     business_address = models.TextField(blank=True)
 
     # finance
-    salary = models.DecimalField(decimal_places=2, blank=True, null=True, default=None)
+    salary = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True, default=None
+    )
 
     # socials + links
     sunshine_list = models.URLField(
@@ -278,15 +294,16 @@ class Teacher(models.Model):
         super().save(*args, **kwargs)
 
 
+# helper function dictating the path the save teacher images
+def teacher_directory_path(instance, filename):
+    return f"teacher/{instance.teacher.pdsb_number}/{filename}"
+
+
 class TeacherPictures(models.Model):
     teacher = models.ForeignKey(
         Teacher, on_delete=models.CASCADE, related_name="pictures"
     )
-    picture = models.ImageField(
-        upload_to=lambda instance, filename: (
-            f"teacher/{instance.teacher.pdsb_number}/{filename}"
-        )
-    )
+    picture = models.ImageField(upload_to=teacher_directory_path)
 
     is_profile_picture = models.BooleanField(
         help_text="Allows selection of profile picture from all the pictures.",
@@ -307,7 +324,9 @@ class TeacherPictures(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    school = models.ForeignKey(School, related_name="students")
+    school = models.ForeignKey(
+        School, on_delete=models.PROTECT, related_name="students"
+    )
     student_number = models.PositiveIntegerField(unique=True)
     grade = models.PositiveIntegerField()
     program = models.ManyToManyField(Program, related_name="students")
