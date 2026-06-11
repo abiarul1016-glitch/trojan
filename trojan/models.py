@@ -52,6 +52,8 @@ class School(models.Model):
     name = models.CharField(max_length=64)
 
     district = models.CharField()
+    street_number = models.PositiveIntegerField()
+    street = models.CharField()
     city = models.CharField(max_length=64)
     province = models.CharField(max_length=64)
     province_code = models.CharField(max_length=2)
@@ -64,6 +66,10 @@ class School(models.Model):
     )
 
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
+
+    @property
+    def address(self):
+        return f"{self.street_number} {self.street}, {self.city}, {self.province}, {self.country}"
 
     def __str__(self):
         return self.name
@@ -90,8 +96,6 @@ class Subject(models.Model):
 
 
 # course-related models
-
-
 class CourseBadge(models.Model):
     COURSE_BADGE_TYPES = [
         ("TOP_COURSE", "top course"),
@@ -115,7 +119,7 @@ class Course(models.Model):
     generated_summary = models.CharField(
         help_text="A summary of a teacher generated using AI, based on the review text.",
         blank=True,
-        default=summary,
+        default=None,
     )
 
     name = models.CharField()
@@ -161,7 +165,7 @@ def course_directory_path(instance, filename):
     return f"course/{instance.course.code}/{filename}"
 
 
-class CoursePictures(models.Model):
+class CoursePicture(models.Model):
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, related_name="pictures"
     )
@@ -192,7 +196,7 @@ class Teacher(models.Model):
     generated_summary = models.CharField(
         help_text="A summary of a teacher generated using AI, based on the review text.",
         blank=True,
-        default=summary,
+        default=None,
     )
 
     # basic info
@@ -206,7 +210,7 @@ class Teacher(models.Model):
     gender = models.CharField(choices=GENDER_CHOICES, max_length=2)
     pronouns = models.CharField(choices=PRONOUN_CHOICES, blank=True)
 
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(blank=True, null=True)
 
     # badge
     badge = models.ForeignKey(
@@ -224,11 +228,17 @@ class Teacher(models.Model):
         regex=r"^[pP]\d+$",
         message="PDSB number must start with 'p' followed by numbers.",
     )
-    pdsb_number = models.CharField(max_length=20, unique=True)
+    pdsb_number = models.CharField(
+        help_text="This 'number' begins with a 'p', and is used to identify teachers in Peel. You must include the 'p', when registering the teacher.",
+        verbose_name="PDSB Number",
+        max_length=20,
+        unique=True,
+    )
 
     # automatically generated upon save if not included
-    pdsb_email = models.EmailField(unique=True, blank=True)
+    pdsb_email = models.EmailField(verbose_name="PDSB Email", unique=True, blank=True)
     pdsb_direct_email = models.EmailField(
+        verbose_name="PDSB Direct Email",
         help_text="The email that teachers check much more frequently than their regular one",
         unique=True,
         blank=True,
@@ -236,7 +246,7 @@ class Teacher(models.Model):
 
     personal_email = models.EmailField(unique=True, blank=True)
 
-    school_phone_extension = models.PositiveIntegerField()
+    school_phone_extension = models.PositiveIntegerField(blank=True, null=True)
     personal_number = models.CharField(
         validators=[phone_regex], max_length=17, blank=True
     )
@@ -299,7 +309,7 @@ def teacher_directory_path(instance, filename):
     return f"teacher/{instance.teacher.pdsb_number}/{filename}"
 
 
-class TeacherPictures(models.Model):
+class TeacherPicture(models.Model):
     teacher = models.ForeignKey(
         Teacher, on_delete=models.CASCADE, related_name="pictures"
     )

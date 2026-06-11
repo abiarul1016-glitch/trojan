@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{% static 'trojan/assets/112D4E - dark/trojan_right.svg' %}" type="image/svg+xml">
-    <link rel="stylesheet" href="{% block stylesheet %}{% static 'trojan/layout.css' %}{% endblock %}">
+    <link rel="icon" href="/assets/trojan_right.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="{% block stylesheet %}{% static 'layout.css' %}{% endblock %}">
     <title>{% block title %}trojan{% endblock %}</title>
 </head>
 <body>
@@ -14,7 +14,7 @@
     <header>
         <nav>
             <ul>
-                <li><a href="#"><img src="{% static 'trojan/assets/112D4E - dark/trojan_right.svg' %}" alt=""></a></li>
+                <li><a href="#"><img src="{% static 'trojan/112D4E - dark/trojan_right.svg' %}" alt=""></a></li>
                 <li><a href="#">home</a></li>
                 <li><a href="#">directory</a></li>
                 <li><a href="#">about</a></li>
@@ -33,11 +33,9 @@
     <footer>
         <div class="footer-column">
             <ul>
-                <li><span class="name-logo"><img src="{% static 'trojan/assets/DBE2EF - secondary/trojan_right.svg' %}" alt=""><h3>trojan</h3></span></li>
+                <li><span class="name-logo"><img src="{% static 'trojan/DBE2EF - secondary/trojan_right.svg' %}" alt=""><h3>trojan</h3></span></li>
                 <li>An Abishan Production</li>
                 <li>&copy; ABISHAN 2026</li>
-                <li></li>
-                <li>built by a true trojan with 💙.</li>
             </ul>
         </div>
 
